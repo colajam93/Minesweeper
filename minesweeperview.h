@@ -2,21 +2,24 @@
 #define MINESWEEPERVIEW_H
 
 #include <QWidget>
+#include <QScopedPointer>
 
 namespace Ui {
 class MinesweeperView;
-}
+} // namespace Ui
 
+namespace MS {
 class MinesweeperView : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit MinesweeperView(QWidget *parent = 0);
+    explicit MinesweeperView(QWidget* parent = nullptr);
     ~MinesweeperView();
 
 private:
-    Ui::MinesweeperView *ui;
+    QScopedPointer<Ui::MinesweeperView> ui_;
 };
+} // namespace MS
 
 #endif // MINESWEEPERVIEW_H
