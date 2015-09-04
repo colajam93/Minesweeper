@@ -13,11 +13,15 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        minesweeperview.cpp
+        minesweeperview.cpp \
+    minesweepermodel.cpp
 
-HEADERS  += minesweeperview.h
+HEADERS  += minesweeperview.h \
+    minesweepermodel.h
 
 FORMS    += minesweeperview.ui
 
 DISTFILES += \
     .gitignore
+
+QMAKE_CXXFLAGS += -std=c++14
