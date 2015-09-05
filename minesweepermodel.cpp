@@ -1,5 +1,6 @@
 #include "minesweepermodel.h"
 #include <random>
+#include <cassert>
 
 namespace {
 static std::random_device rd;
@@ -22,6 +23,21 @@ bool Cell::isMine() const
     return element_ == CellElement::Mine;
 }
 
+Position::Position(int row, int column)
+{
+    row = row;
+    column = column;
+}
+
+Position::Position(std::initializer_list<int> list)
+{
+    assert(list.size() == 2);
+    auto it = std::begin(list);
+    row = *it;
+    ++it;
+    column = *it;
+}
+
 MinesweeperModel::MinesweeperModel(int row, int column, int mine)
     : row_(row), column_(column), cells_(row * column), adjacentMineCount_(row * column)
 {
@@ -41,86 +57,92 @@ MinesweeperModel::MinesweeperModel(int row, int column, int mine)
 
     for(size_t i = 0; i < cells_.size(); ++i) {
         const auto position = indexToPosition(i);
-        const auto row = position.first;
-        const auto column = position.second;
-        if(getCell(row, column)->isMine()) {
+        if(getCellInfo(position).first->isMine()) {
             continue;
         }
-        auto adjacentCells = getAdjacentCells(row, column);
-        for(auto&& cell : adjacentCells) {
-            if(cell && cell->isMine()) {
+        auto adjacentCellInfos = getAdjacentCellInfos(position);
+        for(auto&& cell : adjacentCellInfos) {
+            if(cell.first && cell.first->isMine()) {
                 ++adjacentMineCount_[i];
             }
         }
     }
 }
 
-int MinesweeperModel::positionToIndex(int row, int column) const
+int MinesweeperModel::positionToIndex(const Position& position) const
 {
-    return column_ * row + column;
+    return column_ * position.row + position.column;
 }
 
-MinesweeperModel::Position MinesweeperModel::indexToPosition(int index) const
+Position MinesweeperModel::indexToPosition(int index) const
 {
-    return std::make_pair(index / column_, index % column_);
+    return {index / column_, index % column_};
 }
 
-Cell* MinesweeperModel::getCell(int row, int column)
+MinesweeperModel::CellInfo MinesweeperModel::getCellInfo(const Position& position)
 {
-    auto index = positionToIndex(row, column);
+    auto index = positionToIndex(position);
     if(index < 0 || row_ * column_ <= index) {
-        return nullptr;
+        return std::make_pair(nullptr, Position{});
     }
-    return &cells_[index];
+    return std::make_pair(&cells_[index], position);
 }
 
-std::vector<Cell*> MinesweeperModel::getAdjacentCells(int row, int column)
+MinesweeperModel::CellInfo MinesweeperModel::getCellInfo(int row, int column)
 {
+    return getCellInfo({row, column});
+}
+
+std::vector<MinesweeperModel::CellInfo> MinesweeperModel::getAdjacentCellInfos(const Position& position)
+{
+    const auto row = position.row;
+    const auto column = position.column;
     const bool isTopEdge = row == 0;
     const bool isBottomEdge = row == row_ - 1;
     const bool isLeftEdge = column == 0;
     const bool isRightEdge = column == column_ - 1;
 
-    std::vector<Cell*> v;
+    const CellInfo invalid = std::make_pair(nullptr, Position{});
+    std::vector<CellInfo> v;
     if(!isTopEdge && !isLeftEdge) {
-        v.push_back(getCell(row - 1, column - 1));
+        v.emplace_back(getCellInfo(row - 1, column - 1));
     } else {
-        v.push_back(nullptr);
+        v.emplace_back(invalid);
     }
     if(!isTopEdge) {
-        v.push_back(getCell(row - 1, column));
+        v.emplace_back(getCellInfo(row - 1, column));
     } else {
-        v.push_back(nullptr);
+        v.emplace_back(invalid);
     }
     if(!isTopEdge && !isRightEdge) {
-        v.push_back(getCell(row - 1, column + 1));
+        v.emplace_back(getCellInfo(row - 1, column + 1));
     } else {
-        v.push_back(nullptr);
+        v.emplace_back(invalid);
     }
     if(!isLeftEdge) {
-        v.push_back(getCell(row, column - 1));
+        v.emplace_back(getCellInfo(row, column - 1));
     } else {
-        v.push_back(nullptr);
+        v.emplace_back(invalid);
     }
     if(!isRightEdge) {
-        v.push_back(getCell(row, column + 1));
+        v.emplace_back(getCellInfo(row, column + 1));
     } else {
-        v.push_back(nullptr);
+        v.emplace_back(invalid);
     }
     if(!isBottomEdge && !isLeftEdge) {
-        v.push_back(getCell(row + 1, column - 1));
+        v.emplace_back(getCellInfo(row + 1, column - 1));
     } else {
-        v.push_back(nullptr);
+        v.emplace_back(invalid);
     }
     if(!isBottomEdge) {
-        v.push_back(getCell(row + 1, column));
+        v.emplace_back(getCellInfo(row + 1, column));
     } else {
-        v.push_back(nullptr);
+        v.emplace_back(invalid);
     }
     if(!isBottomEdge && !isRightEdge) {
-        v.push_back(getCell(row + 1, column + 1));
+        v.emplace_back(getCellInfo(row + 1, column + 1));
     } else {
-        v.push_back(nullptr);
+        v.emplace_back(invalid);
     }
     return v;
 }

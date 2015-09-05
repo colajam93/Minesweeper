@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <utility>
+#include <initializer_list>
 
 namespace MS {
 enum class CellState {
@@ -24,19 +25,28 @@ public:
     bool isMine() const;
 };
 
+struct Position {
+    int row = 0;
+    int column = 0;
+    Position() = default;
+    Position(int row, int column);
+    Position(std::initializer_list<int> list);
+};
+
 class MinesweeperModel
 {
-    using Position = std::pair<int, int>;
+    using CellInfo = std::pair<Cell*, Position>;
 
     int row_;
     int column_;
     std::vector<Cell> cells_;
     std::vector<int> adjacentMineCount_;
 
-    int positionToIndex(int row, int column) const;
+    int positionToIndex(const Position& position) const;
     Position indexToPosition(int index) const;
-    Cell* getCell(int row, int column);
-    std::vector<Cell*> getAdjacentCells(int row, int column);
+    CellInfo getCellInfo(const Position& position);
+    CellInfo getCellInfo(int row, int column);
+    std::vector<CellInfo> getAdjacentCellInfos(const Position& position);
 
 public:
     MinesweeperModel(int row, int column, int mine);
