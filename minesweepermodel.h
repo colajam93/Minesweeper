@@ -14,6 +14,10 @@ enum class CellElement {
     Empty, Mine
 };
 
+enum class CellView {
+    Mine, Zero, One, Two, Three, Four, Five, Six, Seven, Eight
+};
+
 class Cell {
     CellState state_;
     CellElement element_;
@@ -22,7 +26,9 @@ class Cell {
 public:
     Cell();
     void setElement(CellElement element);
+    void setOpen();
     bool isMine() const;
+    bool isOpened() const;
 };
 
 struct Position {
@@ -32,6 +38,8 @@ struct Position {
     Position(int row, int column);
     Position(std::initializer_list<int> list);
 };
+
+using CellChange = std::pair<CellView, Position>;
 
 class MinesweeperModel
 {
@@ -50,6 +58,7 @@ class MinesweeperModel
 
 public:
     MinesweeperModel(int row, int column, int mine);
+    std::vector<CellChange> open(int row, int column);
 };
 } // namespace MS
 

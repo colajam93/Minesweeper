@@ -1,10 +1,36 @@
 #include "minesweepermodel.h"
 #include <random>
 #include <cassert>
+#include <iterator>
 
 namespace {
 static std::random_device rd;
 static std::mt19937 mt{rd()};
+
+MS::CellView getCellView(int count)
+{
+    using CellView = MS::CellView;
+    if(count == 0) {
+        return CellView::Zero;
+    } else if(count == 1) {
+        return CellView::One;
+    } else if(count == 2) {
+        return CellView::Two;
+    } else if(count == 3) {
+        return CellView::Three;
+    } else if(count == 4) {
+        return CellView::Four;
+    } else if(count == 5) {
+        return CellView::Five;
+    } else if(count == 6) {
+        return CellView::Six;
+    } else if(count == 7) {
+        return CellView::Seven;
+    } else if(count == 8) {
+        return CellView::Eight;
+    }
+    return CellView::Zero;
+}
 }
 
 namespace MS {
@@ -18,9 +44,19 @@ void Cell::setElement(CellElement element)
     element_ = element;
 }
 
+void Cell::setOpen()
+{
+    opened_ = true;
+}
+
 bool Cell::isMine() const
 {
     return element_ == CellElement::Mine;
+}
+
+bool Cell::isOpened() const
+{
+    return opened_;
 }
 
 Position::Position(int row, int column)
@@ -143,6 +179,45 @@ std::vector<MinesweeperModel::CellInfo> MinesweeperModel::getAdjacentCellInfos(c
         v.emplace_back(getCellInfo(row + 1, column + 1));
     } else {
         v.emplace_back(invalid);
+    }
+    return v;
+}
+
+std::vector<CellChange> MinesweeperModel::open(int row, int column)
+{
+    auto targetCellInfo = getCellInfo(row, column);
+    auto targetCell = targetCellInfo.first;
+    if(targetCell->isOpened()) {
+        return {};
+    }
+
+    targetCell->setOpen();
+    if(targetCell->isMine()) {
+        return {std::make_pair(CellView::Mine, Position{row, column})};
+    }
+
+    auto getCellChange = [&](const Position& position)
+    {
+        return std::make_pair(
+            getCellView(adjacentMineCount_[positionToIndex(position)]),
+            position
+        );
+    };
+
+    auto targetCellPosition = targetCellInfo.second;
+    std::vector<CellChange> v;
+    v.emplace_back(getCellChange(targetCellPosition));
+
+    auto adjacentCellInfos = getAdjacentCellInfos(targetCellPosition);
+    for(auto&& cell: adjacentCellInfos) {
+        auto cellPointer = cell.first;
+        if(cellPointer && cellPointer->isMine()) {
+            return v;
+        }
+    }
+    for(auto&& cell: adjacentCellInfos) {
+        auto part = open(cell.second.row, cell.second.column);
+        v.insert(std::end(v), std::make_move_iterator(std::begin(part)), std::make_move_iterator(std::end(part)));
     }
     return v;
 }
