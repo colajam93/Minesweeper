@@ -14,10 +14,12 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         minesweeperview.cpp \
-    minesweepermodel.cpp
+    minesweepermodel.cpp \
+    minesweepermodelqt.cpp
 
 HEADERS  += minesweeperview.h \
-    minesweepermodel.h
+    minesweepermodel.h \
+    minesweepermodelqt.h
 
 FORMS    += minesweeperview.ui
 
