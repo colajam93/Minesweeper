@@ -4,7 +4,7 @@
 #include <QGraphicsScene>
 #include <QSizeF>
 #include <QRect>
-#include <QRectF>
+#include <QBrush>
 
 namespace {
 static constexpr float cellSize = 37.0f;
@@ -19,6 +19,13 @@ QPointF basePoint(int row, int column)
 }
 
 namespace MS {
+CellRectItem::CellRectItem(int row, int column)
+    : QGraphicsRectItem({basePoint(row, column), cellQSizeF})
+{
+    setPen({Qt::darkCyan, 1.5, Qt::SolidLine, Qt::SquareCap, Qt::RoundJoin});
+    setBrush(Qt::cyan);
+}
+
 MinesweeperView::MinesweeperView(QWidget *parent) :
     QWidget(parent),
     ui_(new Ui::MinesweeperView)
@@ -41,10 +48,15 @@ void MinesweeperView::initView(int row, int column)
     auto scene = new QGraphicsScene(rect);
     for(int i = 0; i < row; ++i) {
         for(int j = 0; j < column; ++j) {
-            scene->addRect(QRectF{basePoint(j, i), cellQSizeF});
+            scene->addItem(new CellRectItem{j, i});
         }
     }
 
+    QBrush backgroundBrush{{153, 204, 255}};
+    scene->setBackgroundBrush(backgroundBrush);
+
+    ui_->graphicsView->hide();
     ui_->graphicsView->setScene(scene);
+    ui_->graphicsView->show();
 }
 } // namespace MS
