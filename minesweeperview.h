@@ -7,6 +7,8 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsItemGroup>
 
+#include "minesweepermodel.h"
+
 namespace Ui {
 class MinesweeperView;
 } // namespace Ui
@@ -39,6 +41,7 @@ public:
 
 public slots:
     void initView(int row, int column);
+    void updateView(std::vector<CellChange> changes);
 
 signals:
     void clicked(int row, int column, Qt::MouseButton button);

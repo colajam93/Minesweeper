@@ -6,6 +6,7 @@
 #include <QRect>
 #include <QBrush>
 #include <QGraphicsRectItem>
+#include <QGraphicsSimpleTextItem>
 
 namespace {
 static constexpr float cellSize = 37.0f;
@@ -18,6 +19,35 @@ static constexpr int cellElementZValue = 1;
 QPointF basePoint(int row, int column)
 {
     return {cellBase * column + cellGap, cellBase * row + cellGap};
+}
+
+QGraphicsSimpleTextItem* changedCellView(MS::CellView view, MS::Position position) {
+    using CellView = MS::CellView;
+    auto text = new QGraphicsSimpleTextItem;
+    text->setPos(basePoint(position.row, position.column));
+    auto font = text->font();
+    font.setPointSize(25);
+    text->setFont(font);
+    if(view == CellView::Mine) {
+        text->setText("*");
+    } else if(view == CellView::One) {
+        text->setText("1");
+    } else if(view == CellView::Two) {
+        text->setText("2");
+    } else if(view == CellView::Three) {
+        text->setText("3");
+    } else if(view == CellView::Four) {
+        text->setText("4");
+    } else if(view == CellView::Five) {
+        text->setText("5");
+    } else if(view == CellView::Six) {
+        text->setText("6");
+    } else if(view == CellView::Seven) {
+        text->setText("7");
+    } else if(view == CellView::Eight) {
+        text->setText("8");
+    }
+    return text;
 }
 }
 
@@ -70,5 +100,21 @@ void MinesweeperView::initView(int row, int column)
     ui_->graphicsView->hide();
     ui_->graphicsView->setScene(scene);
     ui_->graphicsView->show();
+}
+
+void MinesweeperView::updateView(std::vector<CellChange> changes)
+{
+    for(auto&& change: changes) {
+        const auto& view = change.first;
+        const auto& position = change.second;
+        auto scene = ui_->graphicsView->scene();
+        auto target = scene->itemAt(basePoint(position.row, position.column), {});
+        scene->removeItem(target);
+        if(view == CellView::Zero) {
+            continue;
+        }
+        auto changedTarget = changedCellView(view, position);
+        scene->addItem(changedTarget);
+    }
 }
 } // namespace MS

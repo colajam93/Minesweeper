@@ -12,4 +12,11 @@ void MinesweeperModelQt::open(int row, int column)
     auto changes = model_.open(row, column);
     emit updateView(changes);
 }
+
+void MinesweeperModelQt::clicked(int row, int column, Qt::MouseButton button)
+{
+    if(button == Qt::LeftButton) {
+        open(row, column);
+    }
+}
 } // namespace MS

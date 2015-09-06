@@ -11,6 +11,7 @@ class MinesweeperModelQt : public QObject
     Q_OBJECT
 
     MinesweeperModel model_;
+    void open(int row, int column);
 
 public:
     explicit MinesweeperModelQt(QObject* parent = nullptr, int row = 0, int column = 0, int mine = 0);
@@ -20,7 +21,7 @@ signals:
     void updateView(std::vector<CellChange> changes);
 
 public slots:
-    void open(int row, int column);
+    void clicked(int row, int column, Qt::MouseButton button);
 };
 } // namespace MS
 
