@@ -13,12 +13,14 @@ class MinesweeperView : public QWidget
 {
     Q_OBJECT
 
+    QScopedPointer<Ui::MinesweeperView> ui_;
+
 public:
     explicit MinesweeperView(QWidget* parent = nullptr);
     ~MinesweeperView();
 
-private:
-    QScopedPointer<Ui::MinesweeperView> ui_;
+public slots:
+    void initView(int row, int column);
 };
 } // namespace MS
 
