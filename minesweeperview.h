@@ -3,8 +3,9 @@
 
 #include <QWidget>
 #include <QScopedPointer>
-#include <QGraphicsRectItem>
 #include <QObject>
+#include <QGraphicsSceneMouseEvent>
+#include <QGraphicsItemGroup>
 
 namespace Ui {
 class MinesweeperView;
@@ -12,15 +13,22 @@ class MinesweeperView;
 
 namespace MS {
 
-class CellRectItem : public QObject, public QGraphicsRectItem {
+class CellRectItem : public QObject, public QGraphicsItemGroup {
     Q_OBJECT
+
+    int row_;
+    int column_;
+
+    void mousePressEvent(QGraphicsSceneMouseEvent* event);
 
 public:
     CellRectItem(int row, int column);
+
+signals:
+    void clicked(int row, int column, Qt::MouseButton button);
 };
 
 class MinesweeperView : public QWidget {
-{
     Q_OBJECT
 
     QScopedPointer<Ui::MinesweeperView> ui_;
@@ -31,6 +39,9 @@ public:
 
 public slots:
     void initView(int row, int column);
+
+signals:
+    void clicked(int row, int column, Qt::MouseButton button);
 };
 } // namespace MS
 
