@@ -11,6 +11,11 @@ void MinesweeperModelQt::open(int row, int column)
 {
     auto changes = model_.open(row, column);
     emit updateView(changes);
+    for(auto&& change: changes) {
+        if(change.first == CellView::Mine) {
+            emit finish(false);
+        }
+    }
 }
 
 void MinesweeperModelQt::clicked(int row, int column, Qt::MouseButton button)

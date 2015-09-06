@@ -19,6 +19,7 @@ public:
 signals:
     void initView(int row, int column);
     void updateView(std::vector<CellChange> changes);
+    void finish(bool isSucceeded);
 
 public slots:
     void clicked(int row, int column, Qt::MouseButton button);

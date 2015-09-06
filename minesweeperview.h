@@ -42,9 +42,11 @@ public:
 public slots:
     void initView(int row, int column);
     void updateView(std::vector<CellChange> changes);
+    void finish(bool isSucceeded);
 
 signals:
     void clicked(int row, int column, Qt::MouseButton button);
+    void quit();
 };
 } // namespace MS
 

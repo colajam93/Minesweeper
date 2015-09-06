@@ -7,6 +7,7 @@
 #include <QBrush>
 #include <QGraphicsRectItem>
 #include <QGraphicsSimpleTextItem>
+#include <QMessageBox>
 
 namespace {
 static constexpr float cellSize = 37.0f;
@@ -115,6 +116,17 @@ void MinesweeperView::updateView(std::vector<CellChange> changes)
         }
         auto changedTarget = changedCellView(view, position);
         scene->addItem(changedTarget);
+    }
+}
+
+void MinesweeperView::finish(bool isSucceeded)
+{
+    if(isSucceeded) {
+
+    } else {
+        auto message = new QMessageBox(QMessageBox::Information, "Failed", "Failed", QMessageBox::Ok);
+        message->exec();
+        emit quit();
     }
 }
 } // namespace MS
