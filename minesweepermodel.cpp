@@ -39,14 +39,26 @@ Cell::Cell()
 {
 }
 
-void Cell::setElement(CellElement element)
+void Cell::setMine()
 {
-    element_ = element;
+    element_ = CellElement::Mine;
 }
 
-void Cell::setOpen()
+void Cell::setOpened()
 {
     opened_ = true;
+}
+
+CellState Cell::setNextState()
+{
+    if(state_ == CellState::None) {
+        state_ = CellState::Flag;
+    } else if(state_ == CellState::Flag) {
+        state_ = CellState::Doubt;
+    } else if(state_ == CellState::Doubt) {
+        state_ = CellState::None;
+    }
+    return state_;
 }
 
 bool Cell::isMine() const
@@ -57,6 +69,11 @@ bool Cell::isMine() const
 bool Cell::isOpened() const
 {
     return opened_;
+}
+
+bool Cell::isFlagged() const
+{
+    return state_ == CellState::Flag;
 }
 
 Position::Position(int row, int column)
@@ -86,7 +103,7 @@ MinesweeperModel::MinesweeperModel(int row, int column, int mine)
             if(cells_[target].isMine()) {
                 continue;
             }
-            cells_[target].setElement(CellElement::Mine);
+            cells_[target].setMine();
             break;
         }
     }
@@ -187,11 +204,11 @@ std::vector<CellChange> MinesweeperModel::open(int row, int column)
 {
     auto targetCellInfo = getCellInfo(row, column);
     auto targetCell = targetCellInfo.first;
-    if(targetCell->isOpened()) {
+    if(targetCell->isOpened() || targetCell->isFlagged()) {
         return {};
     }
 
-    targetCell->setOpen();
+    targetCell->setOpened();
     if(targetCell->isMine()) {
         return {std::make_pair(CellView::Mine, Position{row, column})};
     }
@@ -220,5 +237,11 @@ std::vector<CellChange> MinesweeperModel::open(int row, int column)
         v.insert(std::end(v), std::make_move_iterator(std::begin(part)), std::make_move_iterator(std::end(part)));
     }
     return v;
+}
+
+CellState MinesweeperModel::nextState(int row, int column)
+{
+    auto targetCellInfo = getCellInfo(row, column);
+    return targetCellInfo.first->setNextState();
 }
 } // namespace MS

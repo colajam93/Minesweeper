@@ -25,10 +25,12 @@ class Cell {
 
 public:
     Cell();
-    void setElement(CellElement element);
-    void setOpen();
+    void setMine();
+    void setOpened();
+    CellState setNextState();
     bool isMine() const;
     bool isOpened() const;
+    bool isFlagged() const;
 };
 
 struct Position {
@@ -59,6 +61,7 @@ class MinesweeperModel
 public:
     MinesweeperModel(int row, int column, int mine);
     std::vector<CellChange> open(int row, int column);
+    CellState nextState(int row, int column);
 };
 } // namespace MS
 
