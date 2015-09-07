@@ -24,7 +24,7 @@ class CellRectItem : public QObject, public QGraphicsItemGroup {
     void mousePressEvent(QGraphicsSceneMouseEvent* event);
 
 public:
-    CellRectItem(int row, int column);
+    CellRectItem(int row, int column, CellState state = CellState::None);
 
 signals:
     void clicked(int row, int column, Qt::MouseButton button);

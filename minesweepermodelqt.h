@@ -12,6 +12,7 @@ class MinesweeperModelQt : public QObject
 
     MinesweeperModel model_;
     void open(int row, int column);
+    void nextState(int row, int column);
 
 public:
     explicit MinesweeperModelQt(QObject* parent = nullptr, int row = 0, int column = 0, int mine = 0);

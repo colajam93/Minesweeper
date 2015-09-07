@@ -53,7 +53,7 @@ QGraphicsSimpleTextItem* changedCellView(MS::CellView view, MS::Position positio
 }
 
 namespace MS {
-CellRectItem::CellRectItem(int row, int column)
+CellRectItem::CellRectItem(int row, int column, CellState state)
     : row_(row), column_(column)
 {
     auto rect = new QGraphicsRectItem({basePoint(row, column), cellQSizeF});
@@ -61,6 +61,19 @@ CellRectItem::CellRectItem(int row, int column)
     rect->setBrush(Qt::cyan);
     rect->setZValue(cellBackgroundZValue);
     addToGroup(rect);
+    if(state != CellState::None) {
+        auto text = new QGraphicsSimpleTextItem;
+        text->setPos(basePoint(row, column));
+        auto font = text->font();
+        font.setPointSize(25);
+        text->setFont(font);
+        if(state == CellState::Flag) {
+            text->setText("F");
+        } else if(state == CellState::Doubt) {
+            text->setText("?");
+        }
+        addToGroup(text);
+    }
 }
 
 void CellRectItem::mousePressEvent(QGraphicsSceneMouseEvent* event)
@@ -109,13 +122,29 @@ void MinesweeperView::updateView(std::vector<CellChange> changes)
         const auto& view = change.first;
         const auto& position = change.second;
         auto scene = ui_->graphicsView->scene();
-        auto target = scene->itemAt(basePoint(position.row, position.column), {});
-        scene->removeItem(target);
+        auto targets = scene->items(basePoint(position.row, position.column));
+        for(auto&& target: targets) {
+            scene->removeItem(target);
+            delete target;
+        }
         if(view == CellView::Zero) {
             continue;
+        } else if(view == CellView::None) {
+            auto changed = new CellRectItem(position.row, position.column);
+            scene->addItem(changed);
+            connect(changed, &CellRectItem::clicked, this, &MinesweeperView::clicked);
+        } else if(view == CellView::Flag) {
+            auto changed = new CellRectItem(position.row, position.column, CellState::Flag);
+            scene->addItem(changed);
+            connect(changed, &CellRectItem::clicked, this, &MinesweeperView::clicked);
+        } else if(view == CellView::Doubt) {
+            auto changed = new CellRectItem(position.row, position.column, CellState::Doubt);
+            scene->addItem(changed);
+            connect(changed, &CellRectItem::clicked, this, &MinesweeperView::clicked);
+        } else {
+            auto changedTarget = changedCellView(view, position);
+            scene->addItem(changedTarget);
         }
-        auto changedTarget = changedCellView(view, position);
-        scene->addItem(changedTarget);
     }
 }
 

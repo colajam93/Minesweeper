@@ -239,9 +239,20 @@ std::vector<CellChange> MinesweeperModel::open(int row, int column)
     return v;
 }
 
-CellState MinesweeperModel::nextState(int row, int column)
+std::vector<CellChange> MinesweeperModel::nextState(int row, int column)
 {
     auto targetCellInfo = getCellInfo(row, column);
-    return targetCellInfo.first->setNextState();
+    if(targetCellInfo.first->isOpened()) {
+        return {};
+    }
+    auto nextState = targetCellInfo.first->setNextState();
+    if(nextState == CellState::None) {
+        return {std::make_pair(CellView::None, targetCellInfo.second)};
+    } else if(nextState == CellState::Flag) {
+        return {std::make_pair(CellView::Flag, targetCellInfo.second)};
+    } else if(nextState == CellState::Doubt) {
+        return {std::make_pair(CellView::Doubt, targetCellInfo.second)};
+    }
+    return {};
 }
 } // namespace MS

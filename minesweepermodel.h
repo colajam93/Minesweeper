@@ -15,7 +15,7 @@ enum class CellElement {
 };
 
 enum class CellView {
-    Mine, Zero, One, Two, Three, Four, Five, Six, Seven, Eight
+    Mine, Zero, One, Two, Three, Four, Five, Six, Seven, Eight, None, Flag, Doubt
 };
 
 class Cell {
@@ -61,7 +61,7 @@ class MinesweeperModel
 public:
     MinesweeperModel(int row, int column, int mine);
     std::vector<CellChange> open(int row, int column);
-    CellState nextState(int row, int column);
+    std::vector<CellChange> nextState(int row, int column);
 };
 } // namespace MS
 

@@ -18,10 +18,18 @@ void MinesweeperModelQt::open(int row, int column)
     }
 }
 
+void MinesweeperModelQt::nextState(int row, int column)
+{
+    auto change = model_.nextState(row, column);
+    emit updateView(change);
+}
+
 void MinesweeperModelQt::clicked(int row, int column, Qt::MouseButton button)
 {
     if(button == Qt::LeftButton) {
         open(row, column);
+    } else if(button == Qt::RightButton) {
+        nextState(row, column);
     }
 }
 } // namespace MS
