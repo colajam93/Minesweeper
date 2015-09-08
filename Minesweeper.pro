@@ -15,13 +15,16 @@ TEMPLATE = app
 SOURCES += main.cpp\
         minesweeperview.cpp \
     minesweepermodel.cpp \
-    minesweepermodelqt.cpp
+    minesweepermodelqt.cpp \
+    minesweeprwelcomeview.cpp
 
 HEADERS  += minesweeperview.h \
     minesweepermodel.h \
-    minesweepermodelqt.h
+    minesweepermodelqt.h \
+    minesweeprwelcomeview.h
 
-FORMS    += minesweeperview.ui
+FORMS    += minesweeperview.ui \
+    minesweeprwelcomeview.ui
 
 DISTFILES += \
     .gitignore

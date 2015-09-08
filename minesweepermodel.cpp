@@ -92,14 +92,21 @@ Position::Position(std::initializer_list<int> list)
 }
 
 MinesweeperModel::MinesweeperModel(int row, int column, int mine)
-    : row_(row), column_(column), cells_(row * column), adjacentMineCount_(row * column)
+    : row_(row), column_(column), mine_(mine), cells_(row * column), adjacentMineCount_(row * column)
 {
-    const int cellCount = row * column;
-    std::uniform_int_distribution<int> distribution{0, cellCount - 1};
+}
+
+void MinesweeperModel::init(int clickedRow, int clickedColumn)
+{
+    const auto clickedIndex = positionToIndex({clickedRow, clickedColumn});
+    std::uniform_int_distribution<int> distribution{0, row_ * column_ - 1};
     auto generator = [&] { return distribution(mt); };
-    for(int i = 0; i < mine; ++i) {
+    for(int i = 0; i < mine_; ++i) {
         while(true) {
             auto target = generator();
+            if(target == clickedIndex) {
+                continue;
+            }
             if(cells_[target].isMine()) {
                 continue;
             }
@@ -120,6 +127,12 @@ MinesweeperModel::MinesweeperModel(int row, int column, int mine)
             }
         }
     }
+    isInitialized_ = true;
+}
+
+bool MinesweeperModel::isInitialized() const
+{
+    return isInitialized_;
 }
 
 int MinesweeperModel::positionToIndex(const Position& position) const

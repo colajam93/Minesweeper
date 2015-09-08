@@ -49,8 +49,10 @@ class MinesweeperModel
 
     int row_;
     int column_;
+    int mine_;
     std::vector<Cell> cells_;
     std::vector<int> adjacentMineCount_;
+    bool isInitialized_ = false;
 
     int positionToIndex(const Position& position) const;
     Position indexToPosition(int index) const;
@@ -60,8 +62,10 @@ class MinesweeperModel
 
 public:
     MinesweeperModel(int row, int column, int mine);
+    void init(int clickedRow, int clickedColumn);
     std::vector<CellChange> open(int row, int column);
     std::vector<CellChange> nextState(int row, int column);
+    bool isInitialized() const;
 };
 } // namespace MS
 

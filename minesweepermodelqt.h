@@ -2,6 +2,7 @@
 #define MINESWEEPERMODELQT_H
 
 #include <QObject>
+#include <memory>
 
 #include "minesweepermodel.h"
 
@@ -10,12 +11,12 @@ class MinesweeperModelQt : public QObject
 {
     Q_OBJECT
 
-    MinesweeperModel model_;
+    std::unique_ptr<MinesweeperModel> model_;
     void open(int row, int column);
     void nextState(int row, int column);
 
 public:
-    explicit MinesweeperModelQt(QObject* parent = nullptr, int row = 0, int column = 0, int mine = 0);
+    explicit MinesweeperModelQt(QObject* parent = nullptr);
 
 signals:
     void initView(int row, int column);
@@ -24,6 +25,7 @@ signals:
 
 public slots:
     void clicked(int row, int column, Qt::MouseButton button);
+    void start(int row, int column, int mine);
 };
 } // namespace MS
 
