@@ -151,51 +151,34 @@ std::vector<MinesweeperModel::CellInfo> MinesweeperModel::getAdjacentCellInfos(c
     const auto row = position.row;
     const auto column = position.column;
     const bool isTopEdge = row == 0;
-    const bool isBottomEdge = row == row_ - 1;
+    const bool isBottomEdge = row == (row_ - 1);
     const bool isLeftEdge = column == 0;
-    const bool isRightEdge = column == column_ - 1;
+    const bool isRightEdge = column == (column_ - 1);
 
-    const CellInfo invalid = std::make_pair(nullptr, Position{});
     std::vector<CellInfo> v;
     if(!isTopEdge && !isLeftEdge) {
         v.emplace_back(getCellInfo(row - 1, column - 1));
-    } else {
-        v.emplace_back(invalid);
     }
     if(!isTopEdge) {
         v.emplace_back(getCellInfo(row - 1, column));
-    } else {
-        v.emplace_back(invalid);
     }
     if(!isTopEdge && !isRightEdge) {
         v.emplace_back(getCellInfo(row - 1, column + 1));
-    } else {
-        v.emplace_back(invalid);
     }
     if(!isLeftEdge) {
         v.emplace_back(getCellInfo(row, column - 1));
-    } else {
-        v.emplace_back(invalid);
     }
     if(!isRightEdge) {
         v.emplace_back(getCellInfo(row, column + 1));
-    } else {
-        v.emplace_back(invalid);
     }
     if(!isBottomEdge && !isLeftEdge) {
         v.emplace_back(getCellInfo(row + 1, column - 1));
-    } else {
-        v.emplace_back(invalid);
     }
     if(!isBottomEdge) {
         v.emplace_back(getCellInfo(row + 1, column));
-    } else {
-        v.emplace_back(invalid);
     }
     if(!isBottomEdge && !isRightEdge) {
         v.emplace_back(getCellInfo(row + 1, column + 1));
-    } else {
-        v.emplace_back(invalid);
     }
     return v;
 }
@@ -227,7 +210,7 @@ std::vector<CellChange> MinesweeperModel::open(int row, int column)
 
     auto adjacentCellInfos = getAdjacentCellInfos(targetCellPosition);
     for(auto&& cell: adjacentCellInfos) {
-        auto cellPointer = cell.first;
+        const auto cellPointer = cell.first;
         if(cellPointer && cellPointer->isMine()) {
             return v;
         }
