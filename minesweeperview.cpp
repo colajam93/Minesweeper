@@ -15,7 +15,6 @@ static constexpr float cellGap = 3.0f;
 static constexpr float cellBase = cellSize + cellGap;
 static const QSizeF cellQSizeF = {cellSize, cellSize};
 static constexpr int cellBackgroundZValue = 0;
-static constexpr int cellElementZValue = 1;
 
 QPointF basePoint(int row, int column)
 {

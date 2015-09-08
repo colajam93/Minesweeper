@@ -78,8 +78,8 @@ bool Cell::isFlagged() const
 
 Position::Position(int row, int column)
 {
-    row = row;
-    column = column;
+    this->row = row;
+    this->column = column;
 }
 
 Position::Position(std::initializer_list<int> list)
