@@ -66,6 +66,7 @@ public:
     std::vector<CellChange> open(int row, int column);
     std::vector<CellChange> nextState(int row, int column);
     bool isInitialized() const;
+    bool isSucceeded() const;
 };
 } // namespace MS
 

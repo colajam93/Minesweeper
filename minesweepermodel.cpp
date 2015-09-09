@@ -2,6 +2,7 @@
 #include <random>
 #include <cassert>
 #include <iterator>
+#include <algorithm>
 
 namespace {
 static std::random_device rd;
@@ -92,7 +93,8 @@ Position::Position(std::initializer_list<int> list)
 }
 
 MinesweeperModel::MinesweeperModel(int row, int column, int mine)
-    : row_(row), column_(column), mine_(mine), cells_(row * column), adjacentMineCount_(row * column)
+    : row_(row), column_(column), mine_(mine), cells_(row * column),
+      adjacentMineCount_(row * column)
 {
 }
 
@@ -139,6 +141,15 @@ void MinesweeperModel::initialize(int clickedRow, int clickedColumn)
 bool MinesweeperModel::isInitialized() const
 {
     return isInitialized_;
+}
+
+bool MinesweeperModel::isSucceeded() const
+{
+    auto closed = std::count_if(std::begin(cells_), std::end(cells_), [this](const Cell& cell)
+    {
+        return !cell.isOpened();
+    });
+    return closed == mine_;
 }
 
 int MinesweeperModel::positionToIndex(const Position& position) const

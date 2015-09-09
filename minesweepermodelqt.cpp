@@ -16,6 +16,9 @@ void MinesweeperModelQt::open(int row, int column)
             emit finish(false);
         }
     }
+    if(model_->isSucceeded()) {
+        emit finish(true);
+    }
 }
 
 void MinesweeperModelQt::nextState(int row, int column)
