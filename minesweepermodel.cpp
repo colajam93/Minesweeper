@@ -96,8 +96,14 @@ MinesweeperModel::MinesweeperModel(int row, int column, int mine)
 {
 }
 
-void MinesweeperModel::init(int clickedRow, int clickedColumn)
+void MinesweeperModel::initialize(int clickedRow, int clickedColumn)
 {
+    for(auto&& cell : cells_) {
+        cell = Cell{};
+    }
+    for(auto&& i : adjacentMineCount_) {
+        i = 0;
+    }
     const auto clickedIndex = positionToIndex({clickedRow, clickedColumn});
     std::uniform_int_distribution<int> distribution{0, row_ * column_ - 1};
     auto generator = [&] { return distribution(mt); };

@@ -47,9 +47,9 @@ class MinesweeperModel
 {
     using CellInfo = std::pair<Cell*, Position>;
 
-    int row_;
-    int column_;
-    int mine_;
+    const int row_;
+    const int column_;
+    const int mine_;
     std::vector<Cell> cells_;
     std::vector<int> adjacentMineCount_;
     bool isInitialized_ = false;
@@ -62,7 +62,7 @@ class MinesweeperModel
 
 public:
     MinesweeperModel(int row, int column, int mine);
-    void init(int clickedRow, int clickedColumn);
+    void initialize(int clickedRow, int clickedColumn);
     std::vector<CellChange> open(int row, int column);
     std::vector<CellChange> nextState(int row, int column);
     bool isInitialized() const;

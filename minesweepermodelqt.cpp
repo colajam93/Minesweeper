@@ -27,7 +27,7 @@ void MinesweeperModelQt::nextState(int row, int column)
 void MinesweeperModelQt::clicked(int row, int column, Qt::MouseButton button)
 {
     if(!model_->isInitialized()) {
-        model_->init(row, column);
+        model_->initialize(row, column);
     }
     if(button == Qt::LeftButton) {
         open(row, column);
