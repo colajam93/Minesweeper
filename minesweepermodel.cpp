@@ -152,6 +152,21 @@ bool MinesweeperModel::isSucceeded() const
     return closed == mine_;
 }
 
+int MinesweeperModel::getRow() const
+{
+    return row_;
+}
+
+int MinesweeperModel::getColumn() const
+{
+    return column_;
+}
+
+void MinesweeperModel::setUninitialized()
+{
+    isInitialized_ = false;
+}
+
 int MinesweeperModel::positionToIndex(const Position& position) const
 {
     return column_ * position.row + position.column;

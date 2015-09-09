@@ -49,4 +49,3 @@ MinesweeprWelcomeView::~MinesweeprWelcomeView()
 {
 }
 } // namespace MS
-

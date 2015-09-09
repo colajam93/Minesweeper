@@ -47,6 +47,8 @@ public slots:
 signals:
     void clicked(int row, int column, Qt::MouseButton button);
     void quit();
+    void restart();
+    void menu();
 };
 } // namespace MS
 

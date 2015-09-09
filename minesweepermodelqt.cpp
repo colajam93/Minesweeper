@@ -44,4 +44,10 @@ void MinesweeperModelQt::start(int row, int column, int mine)
     model_ = std::make_unique<MinesweeperModel>(row, column, mine);
     emit initView(row, column);
 }
+
+void MinesweeperModelQt::restart()
+{
+    model_->setUninitialized();
+    emit initView(model_->getRow(), model_->getColumn());
+}
 } // namespace MS

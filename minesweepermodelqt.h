@@ -26,6 +26,7 @@ signals:
 public slots:
     void clicked(int row, int column, Qt::MouseButton button);
     void start(int row, int column, int mine);
+    void restart();
 };
 } // namespace MS
 
