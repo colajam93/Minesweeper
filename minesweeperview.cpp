@@ -120,6 +120,7 @@ void MinesweeperView::initView(int row, int column)
 
     ui_->graphicsView->setScene(scene);
     ui_->graphicsView->show();
+    setEnabled(true);
 }
 
 void MinesweeperView::updateView(std::vector<CellChange> changes)
@@ -156,6 +157,6 @@ void MinesweeperView::updateView(std::vector<CellChange> changes)
 
 void MinesweeperView::finish(bool)
 {
-    hide();
+    setDisabled(true);
 }
 } // namespace MS
