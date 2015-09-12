@@ -32,4 +32,5 @@ FORMS    += minesweeperview.ui \
 DISTFILES += \
     .gitignore
 
-QMAKE_CXXFLAGS += -std=c++14
+QMAKE_CXXFLAGS += -std=c++14 -stdlib=libc++
+LIBS += -stdlib=libc++ -lc++abi
