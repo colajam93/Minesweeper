@@ -83,15 +83,6 @@ Position::Position(int row, int column)
     this->column = column;
 }
 
-Position::Position(std::initializer_list<int> list)
-{
-    assert(list.size() == 2);
-    auto it = std::begin(list);
-    row = *it;
-    ++it;
-    column = *it;
-}
-
 MinesweeperModel::MinesweeperModel(int row, int column, int mine)
     : row_(row), column_(column), mine_(mine), cells_(row * column),
       adjacentMineCount_(row * column)

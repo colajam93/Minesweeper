@@ -38,7 +38,6 @@ struct Position {
     int column = 0;
     Position() = default;
     Position(int row, int column);
-    Position(std::initializer_list<int> list);
 };
 
 using CellChange = std::pair<CellView, Position>;
