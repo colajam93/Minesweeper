@@ -1,15 +1,15 @@
-#include "minesweeprwelcomeview.h"
+#include "minesweeperwelcomeview.h"
 #include "ui_minesweeprwelcomeview.h"
 
 #include <QPushButton>
 
 namespace MS {
-MinesweeprWelcomeView::MinesweeprWelcomeView(QWidget* parent) :
+MinesweeperWelcomeView::MinesweeperWelcomeView(QWidget* parent) :
     QWidget(parent),
-    ui_(new Ui::MinesweeprWelcomeView)
+    ui_(new Ui::MinesweeperWelcomeView)
 {
     ui_->setupUi(this);
-    connect(ui_->quitPushButton, &QPushButton::clicked, this, &MinesweeprWelcomeView::quit);
+    connect(ui_->quitPushButton, &QPushButton::clicked, this, &MinesweeperWelcomeView::quit);
     connect(ui_->playPushButton, &QPushButton::clicked, [this]
     {
         auto checkedButton = ui_->buttonGroup->checkedButton();
@@ -45,7 +45,7 @@ MinesweeprWelcomeView::MinesweeprWelcomeView(QWidget* parent) :
     });
 }
 
-MinesweeprWelcomeView::~MinesweeprWelcomeView()
+MinesweeperWelcomeView::~MinesweeperWelcomeView()
 {
 }
 } // namespace MS

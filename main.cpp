@@ -2,7 +2,7 @@
 #include <QApplication>
 #include "minesweeperview.h"
 #include "minesweepermodelqt.h"
-#include "minesweeprwelcomeview.h"
+#include "minesweeperwelcomeview.h"
 #include "minesweepergameoverview.h"
 
 int main(int argc, char *argv[])
@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
 
     MS::MinesweeperModelQt model;
     MS::MinesweeperView view;
-    MS::MinesweeprWelcomeView welcomeView;
+    MS::MinesweeperWelcomeView welcomeView;
     MS::MinesweeperGameoverView gameoverView;
 
     QObject::connect(&model, &MS::MinesweeperModelQt::initView, &view, &MS::MinesweeperView::initView);
@@ -21,13 +21,13 @@ int main(int argc, char *argv[])
     QObject::connect(&view, &MS::MinesweeperView::clicked, &model, &MS::MinesweeperModelQt::clicked);
     QObject::connect(&view, &MS::MinesweeperView::quit, &a, &QApplication::quit);
     QObject::connect(&view, &MS::MinesweeperView::restart, &model, &MS::MinesweeperModelQt::restart);
-    QObject::connect(&view, &MS::MinesweeperView::menu, &welcomeView, &MS::MinesweeprWelcomeView::show);
-    QObject::connect(&welcomeView, &MS::MinesweeprWelcomeView::quit, &a, &QApplication::quit);
-    QObject::connect(&welcomeView, &MS::MinesweeprWelcomeView::start, &model, &MS::MinesweeperModelQt::start);
-    QObject::connect(&welcomeView, &MS::MinesweeprWelcomeView::start, &view, &MS::MinesweeperView::show);
+    QObject::connect(&view, &MS::MinesweeperView::menu, &welcomeView, &MS::MinesweeperWelcomeView::show);
+    QObject::connect(&welcomeView, &MS::MinesweeperWelcomeView::quit, &a, &QApplication::quit);
+    QObject::connect(&welcomeView, &MS::MinesweeperWelcomeView::start, &model, &MS::MinesweeperModelQt::start);
+    QObject::connect(&welcomeView, &MS::MinesweeperWelcomeView::start, &view, &MS::MinesweeperView::show);
     QObject::connect(&gameoverView, &MS::MinesweeperGameoverView::quit, &a, &QApplication::quit);
     QObject::connect(&gameoverView, &MS::MinesweeperGameoverView::restart, &model, &MS::MinesweeperModelQt::restart);
-    QObject::connect(&gameoverView, &MS::MinesweeperGameoverView::menu, &welcomeView, &MS::MinesweeprWelcomeView::show);
+    QObject::connect(&gameoverView, &MS::MinesweeperGameoverView::menu, &welcomeView, &MS::MinesweeperWelcomeView::show);
     QObject::connect(&gameoverView, &MS::MinesweeperGameoverView::menu, &view, &MS::MinesweeperView::hide);
     welcomeView.show();
 
