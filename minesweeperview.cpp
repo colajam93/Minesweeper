@@ -154,16 +154,8 @@ void MinesweeperView::updateView(std::vector<CellChange> changes)
     }
 }
 
-void MinesweeperView::finish(bool isSucceeded)
+void MinesweeperView::finish(bool)
 {
-    if(isSucceeded) {
-        auto message = new QMessageBox(QMessageBox::Information, "Succeeded", "Succeeded", QMessageBox::Ok);
-        message->exec();
-        emit quit();
-    } else {
-        auto message = new QMessageBox(QMessageBox::Information, "Failed", "Failed", QMessageBox::Ok);
-        message->exec();
-        emit quit();
-    }
+    hide();
 }
 } // namespace MS

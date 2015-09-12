@@ -17,6 +17,14 @@ class MinesweeperGameoverView : public QWidget {
 public:
     explicit MinesweeperGameoverView(QWidget* parent = 0);
     ~MinesweeperGameoverView();
+
+signals:
+    void quit();
+    void restart();
+    void menu();
+
+public slots:
+    void finish(bool isSucceeded);
 };
 } // namespace MS
 
