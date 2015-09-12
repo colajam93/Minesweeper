@@ -16,15 +16,18 @@ SOURCES += main.cpp\
         minesweeperview.cpp \
     minesweepermodel.cpp \
     minesweepermodelqt.cpp \
-    minesweeprwelcomeview.cpp
+    minesweeprwelcomeview.cpp \
+    minesweepergameoverview.cpp
 
 HEADERS  += minesweeperview.h \
     minesweepermodel.h \
     minesweepermodelqt.h \
-    minesweeprwelcomeview.h
+    minesweeprwelcomeview.h \
+    minesweepergameoverview.h
 
 FORMS    += minesweeperview.ui \
-    minesweeprwelcomeview.ui
+    minesweeprwelcomeview.ui \
+    minesweepergameoverview.ui
 
 DISTFILES += \
     .gitignore
