@@ -58,7 +58,6 @@ class MinesweeperModel
     Position indexToPosition(int index) const;
     CellInfo getCellInfo(const Position& position);
     CellInfo getCellInfo(int row, int column);
-    std::vector<CellInfo> getAdjacentCellInfos(const Position& position);
     std::vector<Position> getAdjacentPositions(const Position& position);
 
 public:

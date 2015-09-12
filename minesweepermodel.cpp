@@ -137,8 +137,9 @@ void MinesweeperModel::initialize(int clickedRow, int clickedColumn)
         if(getCellInfo(position).first->isMine()) {
             continue;
         }
-        auto adjacentCellInfos = getAdjacentCellInfos(position);
-        for(auto&& cell : adjacentCellInfos) {
+        auto adjacentPositions = getAdjacentPositions(position);
+        for(auto&& pos : adjacentPositions) {
+            const auto cell = getCellInfo(pos);
             if(cell.first && cell.first->isMine()) {
                 ++adjacentMineCount_[i];
             }
@@ -237,43 +238,6 @@ std::vector<Position> MinesweeperModel::getAdjacentPositions(const Position& pos
     return v;
 }
 
-std::vector<MinesweeperModel::CellInfo> MinesweeperModel::getAdjacentCellInfos(const Position& position)
-{
-    const auto row = position.row;
-    const auto column = position.column;
-    const bool isTopEdge = row == 0;
-    const bool isBottomEdge = row == (row_ - 1);
-    const bool isLeftEdge = column == 0;
-    const bool isRightEdge = column == (column_ - 1);
-
-    std::vector<CellInfo> v;
-    if(!isTopEdge && !isLeftEdge) {
-        v.emplace_back(getCellInfo(row - 1, column - 1));
-    }
-    if(!isTopEdge) {
-        v.emplace_back(getCellInfo(row - 1, column));
-    }
-    if(!isTopEdge && !isRightEdge) {
-        v.emplace_back(getCellInfo(row - 1, column + 1));
-    }
-    if(!isLeftEdge) {
-        v.emplace_back(getCellInfo(row, column - 1));
-    }
-    if(!isRightEdge) {
-        v.emplace_back(getCellInfo(row, column + 1));
-    }
-    if(!isBottomEdge && !isLeftEdge) {
-        v.emplace_back(getCellInfo(row + 1, column - 1));
-    }
-    if(!isBottomEdge) {
-        v.emplace_back(getCellInfo(row + 1, column));
-    }
-    if(!isBottomEdge && !isRightEdge) {
-        v.emplace_back(getCellInfo(row + 1, column + 1));
-    }
-    return v;
-}
-
 std::vector<CellChange> MinesweeperModel::open(int row, int column)
 {
     auto targetCellInfo = getCellInfo(row, column);
@@ -299,17 +263,18 @@ std::vector<CellChange> MinesweeperModel::open(int row, int column)
     std::vector<CellChange> v;
     v.emplace_back(getCellChange(targetCellPosition));
 
-    auto adjacentCellInfos = getAdjacentCellInfos(targetCellPosition);
-    for(auto&& cell: adjacentCellInfos) {
-        const auto cellPointer = cell.first;
+    const auto adjacentPositions = getAdjacentPositions(targetCellPosition);
+    for(auto&& pos: adjacentPositions) {
+        const auto cellPointer = getCellInfo(pos).first;
         if(cellPointer && cellPointer->isMine()) {
             return v;
         }
     }
-    for(auto&& cell: adjacentCellInfos) {
-        auto part = open(cell.second.row, cell.second.column);
+    for(auto&& pos: adjacentPositions) {
+        auto part = open(pos.row, pos.column);
         v.insert(std::end(v), std::make_move_iterator(std::begin(part)), std::make_move_iterator(std::end(part)));
     }
+
     return v;
 }
 
