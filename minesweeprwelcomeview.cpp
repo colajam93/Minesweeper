@@ -21,7 +21,7 @@ MinesweeprWelcomeView::MinesweeprWelcomeView(QWidget* parent) :
             emit start(8, 8, 10);
         } else if(targetString == ui_->middleRadioButton->text()) {
             emit start(16, 16, 40);
-        } else if(targetString == ui_->highRadioButton->text()) {
+        } else if(targetString == ui_->hardRadioButton->text()) {
             emit start(16, 30, 99);
         } else if(targetString == ui_->customRadioButton->text()) {
             bool rowOk = false;

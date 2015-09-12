@@ -121,9 +121,9 @@
       </spacer>
      </item>
      <item>
-      <widget class="QRadioButton" name="highRadioButton">
+      <widget class="QRadioButton" name="hardRadioButton">
        <property name="text">
-        <string>High</string>
+        <string>Hard</string>
        </property>
        <attribute name="buttonGroup">
         <string notr="true">buttonGroup</string>
