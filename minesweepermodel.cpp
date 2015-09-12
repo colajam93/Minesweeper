@@ -106,13 +106,22 @@ void MinesweeperModel::initialize(int clickedRow, int clickedColumn)
     for(auto&& i : adjacentMineCount_) {
         i = 0;
     }
-    const auto clickedIndex = positionToIndex({clickedRow, clickedColumn});
+
+    auto excludePositions = getAdjacentPositions({clickedRow, clickedColumn});
+    excludePositions.emplace_back(clickedRow, clickedColumn);
     std::uniform_int_distribution<int> distribution{0, row_ * column_ - 1};
     auto generator = [&] { return distribution(mt); };
     for(int i = 0; i < mine_; ++i) {
         while(true) {
             auto target = generator();
-            if(target == clickedIndex) {
+            bool excludeTarget = false;
+            for(auto&& exclude : excludePositions) {
+                if(target == positionToIndex(exclude)) {
+                    excludeTarget = true;
+                    break;
+                }
+            }
+            if(excludeTarget) {
                 continue;
             }
             if(cells_[target].isMine()) {
@@ -189,6 +198,43 @@ MinesweeperModel::CellInfo MinesweeperModel::getCellInfo(const Position& positio
 MinesweeperModel::CellInfo MinesweeperModel::getCellInfo(int row, int column)
 {
     return getCellInfo({row, column});
+}
+
+std::vector<Position> MinesweeperModel::getAdjacentPositions(const Position& position)
+{
+    const auto row = position.row;
+    const auto column = position.column;
+    const bool isTopEdge = row == 0;
+    const bool isBottomEdge = row == (row_ - 1);
+    const bool isLeftEdge = column == 0;
+    const bool isRightEdge = column == (column_ - 1);
+
+    std::vector<Position> v;
+    if(!isTopEdge && !isLeftEdge) {
+        v.emplace_back(row - 1, column - 1);
+    }
+    if(!isTopEdge) {
+        v.emplace_back(row - 1, column);
+    }
+    if(!isTopEdge && !isRightEdge) {
+        v.emplace_back(row - 1, column + 1);
+    }
+    if(!isLeftEdge) {
+        v.emplace_back(row, column - 1);
+    }
+    if(!isRightEdge) {
+        v.emplace_back(row, column + 1);
+    }
+    if(!isBottomEdge && !isLeftEdge) {
+        v.emplace_back(row + 1, column - 1);
+    }
+    if(!isBottomEdge) {
+        v.emplace_back(row + 1, column);
+    }
+    if(!isBottomEdge && !isRightEdge) {
+        v.emplace_back(row + 1, column + 1);
+    }
+    return v;
 }
 
 std::vector<MinesweeperModel::CellInfo> MinesweeperModel::getAdjacentCellInfos(const Position& position)
