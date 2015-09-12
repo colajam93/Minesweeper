@@ -14,6 +14,7 @@ void MinesweeperModelQt::open(int row, int column)
     for(auto&& change: changes) {
         if(change.first == CellView::Mine) {
             emit finish(false);
+            return;
         }
     }
     if(model_->isSucceeded()) {
