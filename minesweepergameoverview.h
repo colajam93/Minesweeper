@@ -2,21 +2,22 @@
 #define MINESWEEPERGAMEOVERVIEW_H
 
 #include <QWidget>
+#include <QScopedPointer>
 
 namespace Ui {
 class MinesweeperGameoverView;
-}
+} // namespace Ui
 
-class MinesweeperGameoverView : public QWidget
-{
+namespace MS {
+class MinesweeperGameoverView : public QWidget {
     Q_OBJECT
 
-public:
-    explicit MinesweeperGameoverView(QWidget *parent = 0);
-    ~MinesweeperGameoverView();
+    QScopedPointer<Ui::MinesweeperGameoverView> ui_;
 
-private:
-    Ui::MinesweeperGameoverView *ui;
+public:
+    explicit MinesweeperGameoverView(QWidget* parent = 0);
+    ~MinesweeperGameoverView();
 };
+} // namespace MS
 
 #endif // MINESWEEPERGAMEOVERVIEW_H

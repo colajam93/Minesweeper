@@ -1,14 +1,16 @@
 #include "minesweepergameoverview.h"
 #include "ui_minesweepergameoverview.h"
 
-MinesweeperGameoverView::MinesweeperGameoverView(QWidget *parent) :
+namespace MS {
+MinesweeperGameoverView::MinesweeperGameoverView(QWidget* parent) :
     QWidget(parent),
-    ui(new Ui::MinesweeperGameoverView)
+    ui_(new Ui::MinesweeperGameoverView)
 {
-    ui->setupUi(this);
+    ui_->setupUi(this);
 }
 
 MinesweeperGameoverView::~MinesweeperGameoverView()
 {
-    delete ui;
 }
+} // namespace MS
+

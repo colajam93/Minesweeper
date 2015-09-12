@@ -3,6 +3,7 @@
 #include "minesweeperview.h"
 #include "minesweepermodelqt.h"
 #include "minesweeprwelcomeview.h"
+#include "minesweepergameoverview.h"
 
 int main(int argc, char *argv[])
 {
@@ -11,6 +12,7 @@ int main(int argc, char *argv[])
     MS::MinesweeperModelQt model;
     MS::MinesweeperView w;
     MS::MinesweeprWelcomeView wv;
+    MS::MinesweeperGameoverView gv;
 
     QObject::connect(&model, &MS::MinesweeperModelQt::initView, &w, &MS::MinesweeperView::initView);
     QObject::connect(&model, &MS::MinesweeperModelQt::updateView, &w, &MS::MinesweeperView::updateView);
