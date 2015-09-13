@@ -1,5 +1,5 @@
 #include "minesweeperwelcomeview.h"
-#include "ui_minesweeprwelcomeview.h"
+#include "ui_minesweeperwelcomeview.h"
 
 #include <QPushButton>
 
