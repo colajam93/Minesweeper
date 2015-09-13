@@ -130,6 +130,9 @@ void MinesweeperView::initView(int row, int column)
             scene->addItem(cellRectItem);
         }
     }
+    if(auto oldScene = ui_->graphicsView->scene()) {
+        delete oldScene;
+    }
 
     QBrush backgroundBrush{{153, 204, 255}};
     scene->setBackgroundBrush(backgroundBrush);
