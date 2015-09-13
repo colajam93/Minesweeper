@@ -16,6 +16,7 @@ static constexpr float cellGap = 3.0f;
 static constexpr float cellBase = cellSize + cellGap;
 static const QSizeF cellQSizeF = {cellSize, cellSize};
 static constexpr int cellBackgroundZValue = 0;
+static const QBrush cellBrush{Qt::cyan};
 
 const QFont& getTextFont()
 {
@@ -68,7 +69,7 @@ CellRectItem::CellRectItem(int row, int column, CellView view)
     setZValue(cellBackgroundZValue);
     if(view == CellView::None || view == CellView::Flag || view == CellView::Doubt) {
         setPen({Qt::darkCyan, 1.5, Qt::SolidLine, Qt::SquareCap, Qt::RoundJoin});
-        setBrush(Qt::cyan);
+        setBrush(cellBrush);
     } else {
         setPen({Qt::NoPen});
         setBrush({});
@@ -83,8 +84,21 @@ void CellRectItem::mousePressEvent(QGraphicsSceneMouseEvent*)
 {
 }
 
+void CellRectItem::mouseMoveEvent(QGraphicsSceneMouseEvent*)
+{
+    if(!(brush() == QBrush{})) {
+        auto tempBrush = cellBrush;
+        tempBrush.setColor(tempBrush.color().darker());
+        setBrush(tempBrush);
+    }
+}
+
 void CellRectItem::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
 {
+    if(!(brush() == QBrush{})) {
+        setBrush(cellBrush);
+    }
+
     if(!boundingRect().contains(event->pos())) {
         return;
     }
@@ -100,6 +114,10 @@ void CellRectItem::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
 
 void CellRectItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent*)
 {
+    if(!(brush() == QBrush{})) {
+        setBrush(cellBrush);
+    }
+
     emit clicked(row_, column_, ClickType::AutoOpen);
 }
 
