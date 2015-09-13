@@ -9,6 +9,7 @@
 #include <QGraphicsSimpleTextItem>
 #include <QMessageBox>
 #include <QPushButton>
+#include <QFont>
 
 namespace {
 static constexpr float cellSize = 37.0f;
@@ -17,18 +18,23 @@ static constexpr float cellBase = cellSize + cellGap;
 static const QSizeF cellQSizeF = {cellSize, cellSize};
 static constexpr int cellBackgroundZValue = 0;
 
+const QFont& getTextFont()
+{
+    static QFont font;
+    font.setPointSize(25);
+    return font;
+}
+
 QPointF basePoint(int row, int column)
 {
     return {cellBase * column + cellGap, cellBase * row + cellGap};
 }
 
-QGraphicsSimpleTextItem* changedCellView(MS::CellView view, MS::Position position) {
+QGraphicsSimpleTextItem* getTextItem(MS::CellView view, MS::Position position) {
     using CellView = MS::CellView;
     auto text = new QGraphicsSimpleTextItem;
     text->setPos(basePoint(position.row, position.column));
-    auto font = text->font();
-    font.setPointSize(25);
-    text->setFont(font);
+    text->setFont(getTextFont());
     if(view == CellView::Mine) {
         text->setText("*");
     } else if(view == CellView::One) {
@@ -47,32 +53,30 @@ QGraphicsSimpleTextItem* changedCellView(MS::CellView view, MS::Position positio
         text->setText("7");
     } else if(view == CellView::Eight) {
         text->setText("8");
+    } else if(view == CellView::Flag) {
+        text->setText("F");
+    } else if(view == CellView::Doubt) {
+        text->setText("?");
     }
     return text;
 }
 }
 
 namespace MS {
-CellRectItem::CellRectItem(int row, int column, CellState state)
-    : row_(row), column_(column)
+CellRectItem::CellRectItem(int row, int column, CellView view)
+    : QGraphicsRectItem({basePoint(row, column), cellQSizeF}), row_(row), column_(column)
 {
-    auto rect = new QGraphicsRectItem({basePoint(row, column), cellQSizeF});
-    rect->setPen({Qt::darkCyan, 1.5, Qt::SolidLine, Qt::SquareCap, Qt::RoundJoin});
-    rect->setBrush(Qt::cyan);
-    rect->setZValue(cellBackgroundZValue);
-    addToGroup(rect);
-    if(state != CellState::None) {
-        auto text = new QGraphicsSimpleTextItem;
-        text->setPos(basePoint(row, column));
-        auto font = text->font();
-        font.setPointSize(25);
-        text->setFont(font);
-        if(state == CellState::Flag) {
-            text->setText("F");
-        } else if(state == CellState::Doubt) {
-            text->setText("?");
-        }
-        addToGroup(text);
+    setZValue(cellBackgroundZValue);
+    if(view == CellView::None || view == CellView::Flag || view == CellView::Doubt) {
+        setPen({Qt::darkCyan, 1.5, Qt::SolidLine, Qt::SquareCap, Qt::RoundJoin});
+        setBrush(Qt::cyan);
+    } else {
+        setPen({Qt::NoPen});
+        setBrush({});
+    }
+    if(view != CellView::None) {
+        auto text = getTextItem(view, {row, column});
+        text->setParentItem(this);
     }
 }
 
@@ -136,21 +140,10 @@ void MinesweeperView::updateView(std::vector<CellChange> changes)
         }
         if(view == CellView::Zero) {
             continue;
-        } else if(view == CellView::None) {
-            auto changed = new CellRectItem(position.row, position.column);
-            scene->addItem(changed);
-            connect(changed, &CellRectItem::clicked, this, &MinesweeperView::clicked);
-        } else if(view == CellView::Flag) {
-            auto changed = new CellRectItem(position.row, position.column, CellState::Flag);
-            scene->addItem(changed);
-            connect(changed, &CellRectItem::clicked, this, &MinesweeperView::clicked);
-        } else if(view == CellView::Doubt) {
-            auto changed = new CellRectItem(position.row, position.column, CellState::Doubt);
-            scene->addItem(changed);
-            connect(changed, &CellRectItem::clicked, this, &MinesweeperView::clicked);
         } else {
-            auto changedTarget = changedCellView(view, position);
-            scene->addItem(changedTarget);
+            auto changed = new CellRectItem(position.row, position.column, view);
+            scene->addItem(changed);
+            connect(changed, &CellRectItem::clicked, this, &MinesweeperView::clicked);
         }
     }
 }

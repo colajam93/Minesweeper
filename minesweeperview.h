@@ -5,7 +5,7 @@
 #include <QScopedPointer>
 #include <QObject>
 #include <QGraphicsSceneMouseEvent>
-#include <QGraphicsItemGroup>
+#include <QGraphicsRectItem>
 
 #include "minesweepermodel.h"
 
@@ -14,8 +14,7 @@ class MinesweeperView;
 } // namespace Ui
 
 namespace MS {
-
-class CellRectItem : public QObject, public QGraphicsItemGroup {
+class CellRectItem : public QObject, public QGraphicsRectItem {
     Q_OBJECT
 
     int row_;
@@ -24,7 +23,7 @@ class CellRectItem : public QObject, public QGraphicsItemGroup {
     void mousePressEvent(QGraphicsSceneMouseEvent* event);
 
 public:
-    CellRectItem(int row, int column, CellState state = CellState::None);
+    CellRectItem(int row, int column, CellView view = CellView::None);
 
 signals:
     void clicked(int row, int column, Qt::MouseButton button);
