@@ -116,6 +116,7 @@ MinesweeperView::~MinesweeperView()
 
 void MinesweeperView::initView(int row, int column)
 {
+    hide();
     const QRect rect{0, 0, static_cast<int>(cellBase * column + cellGap), static_cast<int>(cellBase * row + cellGap)};
     ui_->graphicsView->setSceneRect(rect);
     constexpr int widthSizeOffset = 22 * 2;
@@ -136,6 +137,7 @@ void MinesweeperView::initView(int row, int column)
     ui_->graphicsView->setScene(scene);
     ui_->graphicsView->show();
     setEnabled(true);
+    show();
 }
 
 void MinesweeperView::updateView(std::vector<CellChange> changes)
