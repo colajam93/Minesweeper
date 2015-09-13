@@ -7,7 +7,6 @@
 #include <QBrush>
 #include <QGraphicsRectItem>
 #include <QGraphicsSimpleTextItem>
-#include <QMessageBox>
 #include <QPushButton>
 #include <QFont>
 

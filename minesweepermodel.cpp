@@ -77,12 +77,6 @@ bool Cell::isFlagged() const
     return state_ == CellState::Flag;
 }
 
-Position::Position(int row, int column)
-{
-    this->row = row;
-    this->column = column;
-}
-
 MinesweeperModel::MinesweeperModel(int row, int column, int mine)
     : row_(row), column_(column), mine_(mine), cells_(row * column),
       adjacentMineCount_(row * column)

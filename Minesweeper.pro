@@ -23,7 +23,8 @@ HEADERS  += minesweeperview.h \
     minesweepermodel.h \
     minesweepermodelqt.h \
     minesweepergameoverview.h \
-    minesweeperwelcomeview.h
+    minesweeperwelcomeview.h \
+    minesweepercommon.h
 
 FORMS    += minesweeperview.ui \
     minesweepergameoverview.ui \

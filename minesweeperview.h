@@ -7,7 +7,7 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsRectItem>
 
-#include "minesweepermodel.h"
+#include "minesweepercommon.h"
 
 namespace Ui {
 class MinesweeperView;

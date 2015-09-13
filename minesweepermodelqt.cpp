@@ -1,6 +1,5 @@
 #include "minesweepermodelqt.h"
 
-
 namespace MS {
 MinesweeperModelQt::MinesweeperModelQt(QObject* parent)
     : QObject(parent)

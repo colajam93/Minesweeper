@@ -1,9 +1,10 @@
 #ifndef MINESWEEPERMODEL_H
 #define MINESWEEPERMODEL_H
 
+#include "minesweepercommon.h"
+
 #include <vector>
 #include <utility>
-#include <initializer_list>
 
 namespace MS {
 enum class CellState {
@@ -12,10 +13,6 @@ enum class CellState {
 
 enum class CellElement {
     Empty, Mine
-};
-
-enum class CellView {
-    Mine, Zero, One, Two, Three, Four, Five, Six, Seven, Eight, None, Flag, Doubt
 };
 
 class Cell {
@@ -32,15 +29,6 @@ public:
     bool isOpened() const;
     bool isFlagged() const;
 };
-
-struct Position {
-    int row = 0;
-    int column = 0;
-    Position() = default;
-    Position(int row, int column);
-};
-
-using CellChange = std::pair<CellView, Position>;
 
 class MinesweeperModel
 {
