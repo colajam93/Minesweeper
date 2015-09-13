@@ -20,7 +20,8 @@ class CellRectItem : public QObject, public QGraphicsRectItem {
     int row_;
     int column_;
 
-    void mousePressEvent(QGraphicsSceneMouseEvent* event);
+    void mousePressEvent(QGraphicsSceneMouseEvent*);
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent* event);
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent*);
 
 public:

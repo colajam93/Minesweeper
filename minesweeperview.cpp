@@ -79,8 +79,15 @@ CellRectItem::CellRectItem(int row, int column, CellView view)
     }
 }
 
-void CellRectItem::mousePressEvent(QGraphicsSceneMouseEvent* event)
+void CellRectItem::mousePressEvent(QGraphicsSceneMouseEvent*)
 {
+}
+
+void CellRectItem::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
+{
+    if(!boundingRect().contains(event->pos())) {
+        return;
+    }
     auto button = event->button();
     if(button == Qt::LeftButton) {
         emit clicked(row_, column_, ClickType::Open);
