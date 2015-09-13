@@ -164,6 +164,7 @@ void MinesweeperView::initView(int row, int column)
 
     ui_->graphicsView->setScene(scene);
     ui_->graphicsView->show();
+    ui_->timeLabel->setText("00:00:00");
     setEnabled(true);
     show();
 }
@@ -187,6 +188,11 @@ void MinesweeperView::updateView(std::vector<CellChange> changes)
             connect(changed, &CellRectItem::clicked, this, &MinesweeperView::clicked);
         }
     }
+}
+
+void MinesweeperView::updateTime(QString time)
+{
+    ui_->timeLabel->setText(time);
 }
 
 void MinesweeperView::finish(bool)

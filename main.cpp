@@ -16,6 +16,7 @@ int main(int argc, char *argv[])
 
     QObject::connect(&model, &MS::MinesweeperModelQt::initView, &view, &MS::MinesweeperView::initView);
     QObject::connect(&model, &MS::MinesweeperModelQt::updateView, &view, &MS::MinesweeperView::updateView);
+    QObject::connect(&model, &MS::MinesweeperModelQt::updateTime, &view, &MS::MinesweeperView::updateTime);
     QObject::connect(&model, &MS::MinesweeperModelQt::finish, &gameoverView, &MS::MinesweeperGameoverView::finish);
     QObject::connect(&model, &MS::MinesweeperModelQt::finish, &view, &MS::MinesweeperView::finish);
     QObject::connect(&view, &MS::MinesweeperView::clicked, &model, &MS::MinesweeperModelQt::clicked);

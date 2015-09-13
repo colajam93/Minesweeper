@@ -28,8 +28,9 @@ MinesweeperGameoverView::~MinesweeperGameoverView()
 {
 }
 
-void MinesweeperGameoverView::finish(bool isSucceeded)
+void MinesweeperGameoverView::finish(bool isSucceeded, QString time)
 {
+    ui_->timeLabel->setText(time);
     if(isSucceeded) {
         ui_->resultLabel->setText("Congratulations");
     } else {

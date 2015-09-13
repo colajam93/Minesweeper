@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QScopedPointer>
+#include <QString>
 
 namespace Ui {
 class MinesweeperGameoverView;
@@ -24,7 +25,7 @@ signals:
     void menu();
 
 public slots:
-    void finish(bool isSucceeded);
+    void finish(bool isSucceeded, QString time);
 };
 } // namespace MS
 

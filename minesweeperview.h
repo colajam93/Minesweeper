@@ -6,6 +6,7 @@
 #include <QObject>
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsRectItem>
+#include <QString>
 
 #include "minesweepercommon.h"
 
@@ -44,6 +45,7 @@ public:
 public slots:
     void initView(int row, int column);
     void updateView(std::vector<CellChange> changes);
+    void updateTime(QString time);
     void finish(bool isSucceeded);
 
 signals:
