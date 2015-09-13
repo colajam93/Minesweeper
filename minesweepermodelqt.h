@@ -5,6 +5,7 @@
 #include <memory>
 
 #include "minesweepermodel.h"
+#include "minesweepercommon.h"
 
 namespace MS {
 class MinesweeperModelQt : public QObject
@@ -24,7 +25,7 @@ signals:
     void finish(bool isSucceeded);
 
 public slots:
-    void clicked(int row, int column, Qt::MouseButton button);
+    void clicked(int row, int column, ClickType type);
     void start(int row, int column, int mine);
     void restart();
 };

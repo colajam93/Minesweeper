@@ -20,6 +20,10 @@ struct Position {
 };
 
 using CellChange = std::pair<CellView, Position>;
+
+enum class ClickType {
+    Open, NextState, AutoOpen
+};
 } // namespace MS
 
 #endif // MINESWEEPERCOMMON_H

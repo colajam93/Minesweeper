@@ -21,12 +21,13 @@ class CellRectItem : public QObject, public QGraphicsRectItem {
     int column_;
 
     void mousePressEvent(QGraphicsSceneMouseEvent* event);
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent*);
 
 public:
     CellRectItem(int row, int column, CellView view = CellView::None);
 
 signals:
-    void clicked(int row, int column, Qt::MouseButton button);
+    void clicked(int row, int column, ClickType type);
 };
 
 class MinesweeperView : public QWidget {
@@ -44,7 +45,7 @@ public slots:
     void finish(bool isSucceeded);
 
 signals:
-    void clicked(int row, int column, Qt::MouseButton button);
+    void clicked(int row, int column, ClickType type);
     void quit();
     void restart();
     void menu();

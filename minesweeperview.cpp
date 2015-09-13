@@ -81,7 +81,19 @@ CellRectItem::CellRectItem(int row, int column, CellView view)
 
 void CellRectItem::mousePressEvent(QGraphicsSceneMouseEvent* event)
 {
-    emit clicked(row_, column_, event->button());
+    auto button = event->button();
+    if(button == Qt::LeftButton) {
+        emit clicked(row_, column_, ClickType::Open);
+    } else if(button == Qt::RightButton) {
+        emit clicked(row_, column_, ClickType::NextState);
+    } else if(button == Qt::MidButton) {
+        emit clicked(row_, column_, ClickType::AutoOpen);
+    }
+}
+
+void CellRectItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent*)
+{
+    emit clicked(row_, column_, ClickType::AutoOpen);
 }
 
 MinesweeperView::MinesweeperView(QWidget* parent) :

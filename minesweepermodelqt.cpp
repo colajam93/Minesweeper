@@ -27,14 +27,14 @@ void MinesweeperModelQt::nextState(int row, int column)
     emit updateView(change);
 }
 
-void MinesweeperModelQt::clicked(int row, int column, Qt::MouseButton button)
+void MinesweeperModelQt::clicked(int row, int column, ClickType type)
 {
     if(!model_->isInitialized()) {
         model_->initialize(row, column);
     }
-    if(button == Qt::LeftButton) {
+    if(type == ClickType::Open) {
         open(row, column);
-    } else if(button == Qt::RightButton) {
+    } else if(type == ClickType::NextState) {
         nextState(row, column);
     }
 }
