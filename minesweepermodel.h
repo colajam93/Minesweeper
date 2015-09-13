@@ -52,6 +52,7 @@ public:
     void initialize(int clickedRow, int clickedColumn);
     std::vector<CellChange> open(int row, int column);
     std::vector<CellChange> nextState(int row, int column);
+    std::vector<CellChange> autoOpen(int row, int column);
     bool isInitialized() const;
     bool isSucceeded() const;
     int getRow() const;

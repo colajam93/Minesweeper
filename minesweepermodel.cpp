@@ -279,4 +279,29 @@ std::vector<CellChange> MinesweeperModel::nextState(int row, int column)
     }
     return {};
 }
+
+std::vector<CellChange> MinesweeperModel::autoOpen(int row, int column)
+{
+    auto targetCellInfo = getCellInfo(row, column);
+    if(!targetCellInfo.first->isOpened()) {
+        return {};
+    }
+    auto adjacentPositions = getAdjacentPositions({row, column});
+    int flaggedCount = 0;
+    for(auto&& pos : adjacentPositions) {
+        auto info = getCellInfo(pos);
+        if(info.first->isFlagged()) {
+            ++flaggedCount;
+        }
+    }
+    if(flaggedCount == adjacentMineCount_[positionToIndex({row, column})]) {
+        std::vector<CellChange> v;
+        for(auto&& pos : adjacentPositions) {
+            auto part = open(pos.row, pos.column);
+            v.insert(std::end(v), std::make_move_iterator(std::begin(part)), std::make_move_iterator(std::end(part)));
+        }
+        return v;
+    }
+    return {};
+}
 } // namespace MS

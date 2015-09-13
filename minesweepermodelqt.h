@@ -15,6 +15,7 @@ class MinesweeperModelQt : public QObject
     std::unique_ptr<MinesweeperModel> model_;
     void open(int row, int column);
     void nextState(int row, int column);
+    void autoOpen(int row, int column);
 
 public:
     explicit MinesweeperModelQt(QObject* parent = nullptr);

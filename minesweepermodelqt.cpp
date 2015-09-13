@@ -27,6 +27,21 @@ void MinesweeperModelQt::nextState(int row, int column)
     emit updateView(change);
 }
 
+void MinesweeperModelQt::autoOpen(int row, int column)
+{
+    auto changes = model_->autoOpen(row, column);
+    emit updateView(changes);
+    for(auto&& change: changes) {
+        if(change.first == CellView::Mine) {
+            emit finish(false);
+            return;
+        }
+    }
+    if(model_->isSucceeded()) {
+        emit finish(true);
+    }
+}
+
 void MinesweeperModelQt::clicked(int row, int column, ClickType type)
 {
     if(!model_->isInitialized()) {
@@ -36,6 +51,8 @@ void MinesweeperModelQt::clicked(int row, int column, ClickType type)
         open(row, column);
     } else if(type == ClickType::NextState) {
         nextState(row, column);
+    } else if(type == ClickType::AutoOpen) {
+        autoOpen(row, column);
     }
 }
 
