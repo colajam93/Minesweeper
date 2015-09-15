@@ -186,6 +186,18 @@ MinesweeperModel::CellInfo MinesweeperModel::getCellInfo(int row, int column)
     return getCellInfo({row, column});
 }
 
+Cell& MinesweeperModel::getCell(const Position& position)
+{
+    return const_cast<Cell&>(static_cast<const MinesweeperModel&>(*this).getCell(position));
+}
+
+const Cell& MinesweeperModel::getCell(const Position& position) const
+{
+    auto index = positionToIndex(position);
+    assert(0 <= index && index < row_ * column_);
+    return cells_[index];
+}
+
 std::vector<Position> MinesweeperModel::getAdjacentPositions(const Position& position)
 {
     const auto row = position.row;
