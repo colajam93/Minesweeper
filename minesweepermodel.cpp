@@ -85,6 +85,7 @@ MinesweeperModel::MinesweeperModel(int row, int column, int mine)
 
 void MinesweeperModel::initialize(int clickedRow, int clickedColumn)
 {
+    // initialize
     for(auto&& cell : cells_) {
         cell = Cell{};
     }
@@ -92,44 +93,53 @@ void MinesweeperModel::initialize(int clickedRow, int clickedColumn)
         i = 0;
     }
 
-    auto excludePositions = getAdjacentPositions({clickedRow, clickedColumn});
-    excludePositions.emplace_back(clickedRow, clickedColumn);
-    std::uniform_int_distribution<int> distribution{0, row_ * column_ - 1};
-    auto generator = [&] { return distribution(mt); };
-    for(int i = 0; i < mine_; ++i) {
-        while(true) {
-            auto target = generator();
-            bool excludeTarget = false;
-            for(auto&& exclude : excludePositions) {
-                if(target == positionToIndex(exclude)) {
-                    excludeTarget = true;
+    // set mine
+    {
+        auto excludePositions = getAdjacentPositions({clickedRow, clickedColumn});
+        excludePositions.emplace_back(clickedRow, clickedColumn);
+        std::uniform_int_distribution<int> distribution{0, row_ * column_ - 1};
+        auto generator = [&] { return distribution(mt); };
+        for(int i = 0; i < mine_; ++i) {
+            while(true) {
+                auto target = generator();
+
+                // exclude clicked and its adjacent position
+                bool excludeTarget = false;
+                for(auto&& exclude : excludePositions) {
+                    if(target == positionToIndex(exclude)) {
+                        excludeTarget = true;
+                        break;
+                    }
+                }
+                if(excludeTarget) {
+                    continue;
+                }
+
+                // set mine if cell has not set mine
+                auto& cell = getCell(indexToPosition(target));
+                if(!cell.isMine()) {
+                    cell.setMine();
                     break;
                 }
             }
-            if(excludeTarget) {
-                continue;
-            }
-            if(cells_[target].isMine()) {
-                continue;
-            }
-            cells_[target].setMine();
-            break;
         }
     }
 
-    for(size_t i = 0; i < cells_.size(); ++i) {
+    // count adjacent mine
+    for(int i = 0; i < row_ * column_; ++i) {
         const auto position = indexToPosition(i);
-        if(getCellInfo(position).first->isMine()) {
+        if(getCell(position).isMine()) {
             continue;
         }
         auto adjacentPositions = getAdjacentPositions(position);
         for(auto&& pos : adjacentPositions) {
-            const auto cell = getCellInfo(pos);
-            if(cell.first && cell.first->isMine()) {
+            if(getCell(pos).isMine()) {
                 ++adjacentMineCount_[i];
             }
         }
     }
+
+    // initialize complete
     isInitialized_ = true;
 }
 
