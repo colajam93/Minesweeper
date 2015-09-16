@@ -182,20 +182,6 @@ Position MinesweeperModel::indexToPosition(int index) const
     return {index / column_, index % column_};
 }
 
-MinesweeperModel::CellInfo MinesweeperModel::getCellInfo(const Position& position)
-{
-    auto index = positionToIndex(position);
-    if(index < 0 || row_ * column_ <= index) {
-        return std::make_pair(nullptr, Position{});
-    }
-    return std::make_pair(&cells_[index], position);
-}
-
-MinesweeperModel::CellInfo MinesweeperModel::getCellInfo(int row, int column)
-{
-    return getCellInfo({row, column});
-}
-
 Cell& MinesweeperModel::getCell(const Position& position)
 {
     return const_cast<Cell&>(static_cast<const MinesweeperModel&>(*this).getCell(position));
@@ -247,18 +233,23 @@ std::vector<Position> MinesweeperModel::getAdjacentPositions(const Position& pos
 
 std::vector<CellChange> MinesweeperModel::open(int row, int column)
 {
-    auto targetCellInfo = getCellInfo(row, column);
-    auto targetCell = targetCellInfo.first;
-    if(targetCell->isOpened() || targetCell->isFlagged()) {
+    auto& targetCell = getCell({row, column});
+
+    // cell has already opened or flagged
+    if(targetCell.isOpened() || targetCell.isFlagged()) {
+        // do nothing
         return {};
     }
 
-    targetCell->setOpened();
-    if(targetCell->isMine()) {
+    // open cell
+    targetCell.setOpened();
+
+    // mine
+    if(targetCell.isMine()) {
         return {std::make_pair(CellView::Mine, Position{row, column})};
     }
 
-    auto getCellChange = [&](const Position& position)
+    auto getCellChange = [this](const Position& position)
     {
         return std::make_pair(
             getCellView(adjacentMineCount_[positionToIndex(position)]),
@@ -266,17 +257,22 @@ std::vector<CellChange> MinesweeperModel::open(int row, int column)
         );
     };
 
-    auto targetCellPosition = targetCellInfo.second;
     std::vector<CellChange> v;
-    v.emplace_back(getCellChange(targetCellPosition));
 
-    const auto adjacentPositions = getAdjacentPositions(targetCellPosition);
+    // clicked cell
+    v.emplace_back(getCellChange({row, column}));
+
+    // adjacent cells
+    const auto adjacentPositions = getAdjacentPositions({row, column});
     for(auto&& pos: adjacentPositions) {
-        const auto cellPointer = getCellInfo(pos).first;
-        if(cellPointer && cellPointer->isMine()) {
+        auto& cell = getCell(pos);
+        // if adjacent cells include mine, don't open recursively
+        if(cell.isMine()) {
             return v;
         }
     }
+
+    // open recursively
     for(auto&& pos: adjacentPositions) {
         auto part = open(pos.row, pos.column);
         v.insert(std::end(v), std::make_move_iterator(std::begin(part)), std::make_move_iterator(std::end(part)));
@@ -287,32 +283,32 @@ std::vector<CellChange> MinesweeperModel::open(int row, int column)
 
 std::vector<CellChange> MinesweeperModel::nextState(int row, int column)
 {
-    auto targetCellInfo = getCellInfo(row, column);
-    if(targetCellInfo.first->isOpened()) {
+    auto& targetCell = getCell({row, column});
+    if(targetCell.isOpened()) {
         return {};
     }
-    auto nextState = targetCellInfo.first->setNextState();
+    auto nextState = targetCell.setNextState();
     if(nextState == CellState::None) {
-        return {std::make_pair(CellView::None, targetCellInfo.second)};
+        return {std::make_pair(CellView::None, Position{row, column})};
     } else if(nextState == CellState::Flag) {
-        return {std::make_pair(CellView::Flag, targetCellInfo.second)};
+        return {std::make_pair(CellView::Flag, Position{row, column})};
     } else if(nextState == CellState::Doubt) {
-        return {std::make_pair(CellView::Doubt, targetCellInfo.second)};
+        return {std::make_pair(CellView::Doubt, Position{row, column})};
     }
     return {};
 }
 
 std::vector<CellChange> MinesweeperModel::autoOpen(int row, int column)
 {
-    auto targetCellInfo = getCellInfo(row, column);
-    if(!targetCellInfo.first->isOpened()) {
+    const auto& targetCell = getCell({row, column});
+    if(!targetCell.isOpened()) {
         return {};
     }
-    auto adjacentPositions = getAdjacentPositions({row, column});
+    const auto adjacentPositions = getAdjacentPositions({row, column});
     int flaggedCount = 0;
     for(auto&& pos : adjacentPositions) {
-        auto info = getCellInfo(pos);
-        if(info.first->isFlagged()) {
+        const auto& info = getCell(pos);
+        if(info.isFlagged()) {
             ++flaggedCount;
         }
     }

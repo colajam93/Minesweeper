@@ -22,6 +22,7 @@ class Cell {
 
 public:
     Cell();
+    Cell(const Cell&) = delete;
     void setMine();
     void setOpened();
     CellState setNextState();
@@ -32,8 +33,6 @@ public:
 
 class MinesweeperModel
 {
-    using CellInfo = std::pair<Cell*, Position>;
-
     const int row_;
     const int column_;
     const int mine_;
@@ -43,8 +42,6 @@ class MinesweeperModel
 
     int positionToIndex(const Position& position) const;
     Position indexToPosition(int index) const;
-    CellInfo getCellInfo(const Position& position);
-    CellInfo getCellInfo(int row, int column);
     Cell& getCell(const Position& position);
     const Cell& getCell(const Position& position) const;
     std::vector<Position> getAdjacentPositions(const Position& position);
