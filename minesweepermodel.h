@@ -23,6 +23,8 @@ class Cell {
 public:
     Cell();
     Cell(const Cell&) = delete;
+    Cell& operator=(const Cell&) = delete;
+    Cell& operator=(Cell&&) = default;
     void setMine();
     void setOpened();
     CellState setNextState();
