@@ -3,6 +3,7 @@
 #include <cassert>
 #include <iterator>
 #include <algorithm>
+#include <queue>
 
 namespace {
 static std::random_device rd;
@@ -233,6 +234,23 @@ std::vector<Position> MinesweeperModel::getAdjacentPositions(const Position& pos
 
 std::vector<CellChange> MinesweeperModel::open(int row, int column)
 {
+#ifndef QT_NO_DEBUG
+    auto r = MinesweeperModel{*this}.openRecursive(row, column);
+    auto i = MinesweeperModel{*this}.openIterative(row, column);
+    auto compare = [](const CellChange& lhs, const CellChange& rhs)
+    {
+        return std::make_pair(lhs.second.row, lhs.second.column) < std::make_pair(rhs.second.row, rhs.second.column);
+    };
+
+    std::sort(std::begin(r), std::end(r), compare);
+    std::sort(std::begin(i), std::end(i), compare);
+    assert(r == i);
+#endif
+    return openIterative(row, column);
+}
+
+std::vector<CellChange> MinesweeperModel::openRecursive(int row, int column)
+{
     auto& targetCell = getCell({row, column});
 
     // cell has already opened or flagged
@@ -276,6 +294,61 @@ std::vector<CellChange> MinesweeperModel::open(int row, int column)
     for(auto&& pos: adjacentPositions) {
         auto part = open(pos.row, pos.column);
         v.insert(std::end(v), std::make_move_iterator(std::begin(part)), std::make_move_iterator(std::end(part)));
+    }
+
+    return v;
+}
+
+std::vector<CellChange> MinesweeperModel::openIterative(int row, int column)
+{
+    auto& targetCell = getCell({row, column});
+
+    // cell has already opened or flagged
+    if(targetCell.isOpened() || targetCell.isFlagged()) {
+        // do nothing
+        return {};
+    }
+
+    // open cell
+    targetCell.setOpened();
+
+    // mine
+    if(targetCell.isMine()) {
+        return {std::make_pair(CellView::Mine, Position{row, column})};
+    }
+
+    auto isAdjacentMineExist = [this](const Position& position) {
+        const auto adjacentPositions = getAdjacentPositions(position);
+        for(auto&& pos: adjacentPositions) {
+            auto& cell = getCell(pos);
+            if(cell.isMine()) {
+                return true;
+            }
+        }
+        return false;
+    };
+    auto getCellChange = [this](const Position& position)
+    {
+        return std::make_pair(
+            getCellView(adjacentMineCount_[positionToIndex(position)]),
+            position
+        );
+    };
+    std::queue<Position> processQueue;
+    std::vector<CellChange> v;
+    processQueue.push({row, column});
+    while(!processQueue.empty()) {
+        auto current = processQueue.front();
+        v.emplace_back(getCellChange(current));
+        if(!isAdjacentMineExist(current)) {
+            for(auto&& pos: getAdjacentPositions(current)){
+                if(!getCell(pos).isOpened()){
+                    processQueue.push(pos);
+                    getCell(pos).setOpened();
+                }
+            }
+        }
+        processQueue.pop();
     }
 
     return v;

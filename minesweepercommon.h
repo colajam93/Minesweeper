@@ -19,6 +19,11 @@ struct Position {
     }
 };
 
+inline bool operator==(const Position& lhs, const Position& rhs)
+{
+    return lhs.row == rhs.row && lhs.column == rhs.column;
+}
+
 using CellChange = std::pair<CellView, Position>;
 
 enum class ClickType {

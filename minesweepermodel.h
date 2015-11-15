@@ -22,8 +22,7 @@ class Cell {
 
 public:
     Cell();
-    Cell(const Cell&) = delete;
-    Cell& operator=(const Cell&) = delete;
+    Cell(const Cell&) = default;
     Cell& operator=(Cell&&) = default;
     void setMine();
     void setOpened();
@@ -52,6 +51,8 @@ public:
     MinesweeperModel(int row, int column, int mine);
     void initialize(int clickedRow, int clickedColumn);
     std::vector<CellChange> open(int row, int column);
+    std::vector<CellChange> openIterative(int row, int column);
+    std::vector<CellChange> openRecursive(int row, int column);
     std::vector<CellChange> nextState(int row, int column);
     std::vector<CellChange> autoOpen(int row, int column);
     bool isInitialized() const;
