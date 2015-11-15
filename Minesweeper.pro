@@ -34,5 +34,5 @@ DISTFILES += \
     .gitignore \
     README.md
 
-QMAKE_CXXFLAGS += -std=c++14 -stdlib=libc++
+QMAKE_CXXFLAGS += -std=c++14 -stdlib=libc++ -Wextra
 LIBS += -stdlib=libc++ -lc++abi

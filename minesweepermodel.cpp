@@ -87,7 +87,7 @@ void MinesweeperModel::initialize(int clickedRow, int clickedColumn)
 {
     // initialize
     for(auto&& cell : cells_) {
-        cell = std::move(Cell{});
+        cell = Cell{};
     }
     for(auto&& i : adjacentMineCount_) {
         i = 0;
