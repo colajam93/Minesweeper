@@ -51,8 +51,6 @@ public:
     MinesweeperModel(int row, int column, int mine);
     void initialize(int clickedRow, int clickedColumn);
     std::vector<CellChange> open(int row, int column);
-    std::vector<CellChange> openIterative(int row, int column);
-    std::vector<CellChange> openRecursive(int row, int column);
     std::vector<CellChange> nextState(int row, int column);
     std::vector<CellChange> autoOpen(int row, int column);
     bool isInitialized() const;
