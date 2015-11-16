@@ -271,7 +271,7 @@ std::vector<CellChange> MinesweeperModel::open(int row, int column)
     std::vector<CellChange> v;
     processQueue.push({row, column});
     while(!processQueue.empty()) {
-        auto current = processQueue.front();
+        const auto& current = processQueue.front();
         v.emplace_back(getCellChange(current));
         if(!isAdjacentMineExist(current)) {
             for(auto&& pos: getAdjacentPositions(current)){
