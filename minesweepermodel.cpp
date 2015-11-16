@@ -250,16 +250,6 @@ std::vector<CellChange> MinesweeperModel::open(int row, int column)
         return {std::make_pair(CellView::Mine, Position{row, column})};
     }
 
-    auto isAdjacentMineExist = [this](const Position& position) {
-        const auto adjacentPositions = getAdjacentPositions(position);
-        for(auto&& pos: adjacentPositions) {
-            auto& cell = getCell(pos);
-            if(cell.isMine()) {
-                return true;
-            }
-        }
-        return false;
-    };
     auto getCellChange = [this](const Position& position)
     {
         return std::make_pair(
@@ -273,7 +263,7 @@ std::vector<CellChange> MinesweeperModel::open(int row, int column)
     while(!processQueue.empty()) {
         const auto& current = processQueue.front();
         v.emplace_back(getCellChange(current));
-        if(!isAdjacentMineExist(current)) {
+        if(adjacentMineCount_[positionToIndex(current)] == 0) {
             for(auto&& pos: getAdjacentPositions(current)){
                 if(!getCell(pos).isOpened()){
                     processQueue.push(pos);
