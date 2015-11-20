@@ -28,3 +28,7 @@ $ make
 
 Run `Minesweeper`, choose difficulty, and then enjoy!
 Left click is open. Right click is Flag. Middle click or Double click is automatically open if enough cells are flagged.
+
+## License
+
+MIT
