@@ -7,13 +7,9 @@
 #include <utility>
 
 namespace MS {
-enum class CellState {
-    None, Flag, Doubt
-};
+enum class CellState { None, Flag, Doubt };
 
-enum class CellElement {
-    Empty, Mine
-};
+enum class CellElement { Empty, Mine };
 
 class Cell {
     CellState state_;
@@ -32,8 +28,7 @@ public:
     bool isFlagged() const;
 };
 
-class MinesweeperModel
-{
+class MinesweeperModel {
     const int row_;
     const int column_;
     const int mine_;

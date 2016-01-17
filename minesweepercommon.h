@@ -5,7 +5,19 @@
 
 namespace MS {
 enum class CellView {
-    Mine, Zero, One, Two, Three, Four, Five, Six, Seven, Eight, None, Flag, Doubt
+    Mine,
+    Zero,
+    One,
+    Two,
+    Three,
+    Four,
+    Five,
+    Six,
+    Seven,
+    Eight,
+    None,
+    Flag,
+    Doubt
 };
 
 struct Position {
@@ -26,9 +38,7 @@ inline bool operator==(const Position& lhs, const Position& rhs)
 
 using CellChange = std::pair<CellView, Position>;
 
-enum class ClickType {
-    Open, NextState, AutoOpen
-};
+enum class ClickType { Open, NextState, AutoOpen };
 } // namespace MS
 
 #endif // MINESWEEPERCOMMON_H

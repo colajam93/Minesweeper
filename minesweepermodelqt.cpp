@@ -12,10 +12,10 @@ QTimer& getTimer()
 
 namespace MS {
 MinesweeperModelQt::MinesweeperModelQt(QObject* parent)
-    : QObject(parent), time_()
+    : QObject(parent)
+    , time_()
 {
-    connect(&getTimer(), &QTimer::timeout, [&]
-    {
+    connect(&getTimer(), &QTimer::timeout, [&] {
         time_ = time_.addSecs(1);
         emit updateTime(time_.toString());
     });
@@ -25,13 +25,13 @@ void MinesweeperModelQt::open(int row, int column)
 {
     auto changes = model_->open(row, column);
     emit updateView(changes);
-    for(auto&& change: changes) {
-        if(change.first == CellView::Mine) {
+    for (auto&& change : changes) {
+        if (change.first == CellView::Mine) {
             onFinish(false);
             return;
         }
     }
-    if(model_->isSucceeded()) {
+    if (model_->isSucceeded()) {
         onFinish(true);
     }
 }
@@ -46,13 +46,13 @@ void MinesweeperModelQt::autoOpen(int row, int column)
 {
     auto changes = model_->autoOpen(row, column);
     emit updateView(changes);
-    for(auto&& change: changes) {
-        if(change.first == CellView::Mine) {
+    for (auto&& change : changes) {
+        if (change.first == CellView::Mine) {
             onFinish(false);
             return;
         }
     }
-    if(model_->isSucceeded()) {
+    if (model_->isSucceeded()) {
         onFinish(true);
     }
 }
@@ -66,16 +66,18 @@ void MinesweeperModelQt::onFinish(bool isSucceeded)
 
 void MinesweeperModelQt::clicked(int row, int column, ClickType type)
 {
-    if(!model_->isInitialized()) {
+    if (!model_->isInitialized()) {
         model_->initialize(row, column);
         getTimer().start(1000);
         time_ = QTime{0, 0};
     }
-    if(type == ClickType::Open) {
+    if (type == ClickType::Open) {
         open(row, column);
-    } else if(type == ClickType::NextState) {
+    }
+    else if (type == ClickType::NextState) {
         nextState(row, column);
-    } else if(type == ClickType::AutoOpen) {
+    }
+    else if (type == ClickType::AutoOpen) {
         autoOpen(row, column);
     }
 }

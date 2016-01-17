@@ -10,8 +10,7 @@
 #include "minesweepercommon.h"
 
 namespace MS {
-class MinesweeperModelQt : public QObject
-{
+class MinesweeperModelQt : public QObject {
     Q_OBJECT
 
     std::unique_ptr<MinesweeperModel> model_;
